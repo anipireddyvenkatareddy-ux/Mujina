@@ -25,14 +25,14 @@ public class IdpController extends SharedController {
         configuration().setAttributes(attributes);
     }
 
-    @PutMapping("/attributes/{name:.+}")
-    public void setAttribute(@PathVariable String name, @RequestBody List<String> values) {
+    @PutMapping("/attributes/")
+    public void setAttribute(@RequestParam String name, @RequestBody List<String> values) {
         LOG.info("Request to set attribute {} to {}", name, values);
         configuration().getAttributes().put(name, values);
     }
 
-    @PutMapping("/attributes/{name:.+}/{userName:.+}")
-    public void setAttributeForUser(@PathVariable String name, @PathVariable String userName,
+    @PutMapping("/attributes/{userName}")
+    public void setAttributeForUser(@PathVariable String userName, @RequestParam String name,
                                     @RequestBody List<String> values) {
         LOG.info("Request to set attribute {} to {} for user {}", name, values, userName);
         configuration().getUsers().stream().filter(userAuthenticationToken -> userAuthenticationToken.getName().equals
@@ -40,14 +40,14 @@ public class IdpController extends SharedController {
                 "must be created", userName))).getAttributes().put(name, values);
     }
 
-    @DeleteMapping("/attributes/{name:.+}")
-    public void removeAttribute(@PathVariable String name) {
+     @DeleteMapping("/attributes/")
+    public void removeAttribute(@RequestParam String name) {
         LOG.info("Request to remove attribute {}", name);
         configuration().getAttributes().remove(name);
     }
 
-    @DeleteMapping("/attributes/{name:.+}/{userName:.+}")
-    public void removeAttributeForUser(@PathVariable String name, @PathVariable String userName) {
+    @DeleteMapping("/attributes/{userName}")
+    public void removeAttributeForUser(@PathVariable String userName, @RequestParam String name) {
         LOG.info("Request to remove attribute {} for user {}", name, userName);
         configuration().getUsers().stream().filter(userAuthenticationToken -> userAuthenticationToken.getName().equals
                 (userName)).findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("User %s first " +
