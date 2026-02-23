@@ -83,7 +83,7 @@ public class IdpController extends SharedController {
         configuration().setAcsEndpoint(acsEndpoint);
     }
 
-    @PutMapping("/attributes/{userName}")
+    @PutMapping("/addattributes/{userName}")
     public void setAttributeRequestParamForUser(@PathVariable String userName,@RequestParam String name,
                                     @RequestBody List<String> values) {
         LOG.info("Request to set attribute {} to {} for user {}", name, values, userName);
@@ -92,7 +92,7 @@ public class IdpController extends SharedController {
                 "must be created", userName))).getAttributes().put(name, values);
     }
     
-    @DeleteMapping("/attributes/{userName}")
+    @DeleteMapping("/deleteattributes/{userName}")
     public void removeAttributeRequestParamForUser(@PathVariable String userName, @RequestParam String name) {
         LOG.info("Request to remove attribute {} for user {}", name, userName);
         configuration().getUsers().stream().filter(userAuthenticationToken -> userAuthenticationToken.getName().equals
